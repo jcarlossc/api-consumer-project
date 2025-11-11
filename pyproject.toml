@@ -15,7 +15,7 @@ dependencies = [
 packages = [{include = "api_consumer_project", from = "src"}]
 
 [tool.poetry.scripts]
-api = "api-consumer-project.main:main"
+api = "api_consumer_project.main:main"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.18.2"
