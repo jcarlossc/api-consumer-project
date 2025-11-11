@@ -1,6 +1,6 @@
-from app.strategies.rest_client import RestClient
+from api_consumer_project.strategies.RestClient import RestClient
 
-class APIClientFactory:
+class ApiClientFactory:
     @staticmethod
     def create(api_type: str, base_url: str):
         match api_type.lower():

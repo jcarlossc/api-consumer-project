@@ -1,9 +1,9 @@
 from typing import Any, Union
 import requests
-from api_consumer_project.core.APIClientStrategy import APIClientStrategy
-from app.models.response_model import ResponseModel
+from api_consumer_project.core.ApiClientStrategy import ApiClientStrategy
+from api_consumer_project.models.ResponseModel import ResponseModel
 
-class RestClient(APIClientStrategy):
+class RestClient(ApiClientStrategy):
 
     JSONType = Union[dict[str, Any], list[Any]]
 
