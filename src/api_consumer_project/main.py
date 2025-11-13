@@ -1,4 +1,5 @@
 from api_consumer_project.core.ApiClientFactory import ApiClientFactory
+# from api_consumer_project.strategies.SoapClient import SoapClient
 
 def main():
 
@@ -14,7 +15,7 @@ def main():
     print("=" * 60)    
     print(response.to_dict()) 
     print("=" * 60)
-    
+
     '''
 
     '''
@@ -44,8 +45,24 @@ def main():
     '''
 
 
+    '''
+    soap_client = ApiClientFactory.create("soap", "http://www.dneonline.com/calculator.asmx?wsdl")
 
+    endpoint = "Add"
 
+    params = {"intA": 15, "intB": 5}
+
+    response = soap_client.fetch(endpoint, params)
+
+    print("=" * 60)
+    print(f"Sucesso: {response.success}")
+    print(f"Status: {response.status_code}")
+    print(f"Mensagem: {response.message}")
+    print(f"Dados:")
+    print(response.data)
+    print("=" * 60)
+    
+    '''
 
 
 if __name__ == "__main__":
