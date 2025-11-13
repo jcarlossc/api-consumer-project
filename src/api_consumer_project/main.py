@@ -1,6 +1,4 @@
 from api_consumer_project.core.ApiClientFactory import ApiClientFactory
-from api_consumer_project.strategies.GraphQLClient import GraphQLClient
-
 
 def main():
 
@@ -9,9 +7,9 @@ def main():
     response = rest_client.fetch("estados")
 
     if response.success:
-        print(f"✅ {len(response.data)} informações obtidas com sucesso!")
+        print(f"{len(response.data)} informações obtidas com sucesso!")
     else:
-        print(f"❌ Erro ({response.status_code}): {response.message}")
+        print(f"Erro ({response.status_code}): {response.message}")
 
     print("=" * 60)    
     print(response.to_dict()) 
@@ -19,10 +17,9 @@ def main():
     '''
 
     '''
-    base_url = "https://countries.trevorblades.com/"
 
-    client = GraphQLClient(base_url)
-
+    graphql_client = ApiClientFactory.create("graphql", "https://countries.trevorblades.com/")
+    
     query = """
     {
     countries {
@@ -33,16 +30,20 @@ def main():
     }
     """
 
-    response = client.fetch(endpoint="", params={"query": query})
-
+    response = graphql_client.fetch(endpoint="", params={"query": query})
+    
     print("=" * 60)
-    print(f"✅ Sucesso: {response.success}")
-    print(f"🌐 Status: {response.status_code}")
-    print(f"📄 Mensagem: {response.message}")
-    print(f"📊 Dados:")
+    print(f"Sucesso: {response.success}")
+    print(f"Status: {response.status_code}")
+    print(f"Mensagem: {response.message}")
+    print(f"Dados:")
     print(response.data)
     print("=" * 60) 
+    
     '''
+
+
+
 
 
 
