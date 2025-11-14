@@ -6,9 +6,9 @@ from api_consumer_project.models.ResponseModel import ResponseModel
 class SoapClient(ApiClientStrategy):
     def __init__(self, wsdl_url: str) -> None:
         self.wsdl_url = wsdl_url
-        self.client = Client(wsdl=wsdl_url)
+        self.client = Client(wsdl = wsdl_url)
 
-    def fetch(self, endpoint: str, params=None) -> ResponseModel:
+    def fetch(self, endpoint: str, params = None) -> ResponseModel:
         try:
             method = getattr(self.client.service, endpoint)
             result = method(**(params or {}))

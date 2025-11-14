@@ -1,5 +1,7 @@
 from api_consumer_project.strategies.RestClient import RestClient
 from api_consumer_project.strategies.GraphQLClient import GraphQLClient
+from api_consumer_project.strategies.SoapClient import SoapClient
+from api_consumer_project.strategies.WebSocketClient import WebSocketClient
 
 class ApiClientFactory:
     @staticmethod
@@ -9,5 +11,9 @@ class ApiClientFactory:
                 return RestClient(base_url)
             case "graphql":
                 return GraphQLClient(base_url)
+            case "soap":
+                return SoapClient(base_url)
+            case "websocket":
+                return WebSocketClient(base_url)
             case _:
                 raise ValueError(f"Tipo de API desconhecido: {api_type}")
