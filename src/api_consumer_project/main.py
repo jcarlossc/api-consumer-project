@@ -1,5 +1,5 @@
 from api_consumer_project.core.ApiClientFactory import ApiClientFactory
-
+import json
 
 def main():
 
@@ -82,6 +82,19 @@ def main():
     print("=" * 60)
 
     '''
+
+    base = "https://services.odata.org/V4/TripPinServiceRW"
+    client = ApiClientFactory.create("odata", base)
+
+    response = client.fetch("People", params={"$top": 5})  
+
+    print("=" * 60)
+    print(f"Sucesso: {response.success}")
+    print(f"Status: {response.status_code}")
+    print(f"Mensagem: {response.message}")
+    print(f"Dados:")
+    print(json.dumps(response.data, indent=2, ensure_ascii=False))
+    print("=" * 60) 
     
 if __name__ == "__main__":
     main()
