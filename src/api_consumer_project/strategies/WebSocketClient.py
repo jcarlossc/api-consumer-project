@@ -1,7 +1,8 @@
-import asyncio
 import websockets
+from typing import Any, Optional
 from api_consumer_project.core.ApiClientStrategy import ApiClientStrategy
 from api_consumer_project.models.ResponseModel import ResponseModel
+
 
 class WebSocketClient(ApiClientStrategy):
     def __init__(self, url: str) -> None:
@@ -12,26 +13,23 @@ class WebSocketClient(ApiClientStrategy):
             async with websockets.connect(self.url) as ws:
                 await ws.send(message)
                 response = await ws.recv()
-
                 return ResponseModel(
                     success=True,
                     status_code=200,
-                    message="Mensagem enviada e resposta recebida com sucesso via WebSocket",
                     data=response,
-                    metadata={"sent": message}
+                    message="WebSocket OK"
                 )
         except Exception as e:
-            return ResponseModel(
-                success=False,
-                status_code=500,
-                message=f"Erro na comunicação WebSocket: {str(e)}",
-                data=None,
-                metadata={"sent": message}
-            )
+            return ResponseModel(success=False, status_code=500, message=str(e))
 
-    def fetch(self, endpoint: str = None, params=None) -> ResponseModel:
-        message = params.get("message") if params else ""
+    def fetch(
+        self,
+        endpoint: Optional[str] = None,
+        params: Optional[dict[str, Any]] = None
+    ) -> ResponseModel:
+        import asyncio
+        msg = params.get("message", "") if params else ""
+        return asyncio.run(self._async_fetch(msg))
 
-        return asyncio.run(self._async_fetch(message))
 
 

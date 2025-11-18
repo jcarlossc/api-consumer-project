@@ -1,15 +1,26 @@
 # src/api_consumer_project/strategies/SoapClient.py
+from typing import Optional, Any
 from zeep import Client
 from api_consumer_project.core.ApiClientStrategy import ApiClientStrategy
 from api_consumer_project.models.ResponseModel import ResponseModel
 
 class SoapClient(ApiClientStrategy):
     def __init__(self, wsdl_url: str) -> None:
-        self.wsdl_url = wsdl_url
-        self.client = Client(wsdl = wsdl_url)
+        self.client = Client(wsdl=wsdl_url)
 
-    def fetch(self, endpoint: str, params = None) -> ResponseModel:
+    def fetch(
+        self,
+        endpoint: Optional[str] = None,
+        params: Optional[dict[str, Any]] = None
+    ) -> ResponseModel:
+
         try:
+            if endpoint is None:
+                return ResponseModel(
+                    success=False,
+                    status_code=400,
+                    message="SOAP endpoint cannot be None"
+                )
             method = getattr(self.client.service, endpoint)
             result = method(**(params or {}))
 
@@ -17,15 +28,12 @@ class SoapClient(ApiClientStrategy):
                 success=True,
                 status_code=200,
                 data=result,
-                message="Consulta SOAP realizada com sucesso",
-                metadata={"endpoint": endpoint, "params": params},
+                message="SOAP OK"
             )
-
         except Exception as e:
             return ResponseModel(
                 success=False,
                 status_code=500,
-                data=None,
-                message=f"Erro ao consumir serviço SOAP: {e}",
-                metadata={"endpoint": endpoint, "params": params},
+                message=str(e)
             )
+

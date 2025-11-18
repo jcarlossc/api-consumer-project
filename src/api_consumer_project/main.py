@@ -3,8 +3,12 @@ import json
 
 def main():
 
-    '''
-    rest_client = ApiClientFactory.create("rest", "https://servicodados.ibge.gov.br/api/v1/localidades")
+    
+    # =====================================================================
+    # REST
+    
+    base = "https://servicodados.ibge.gov.br/api/v1/localidades"
+    rest_client = ApiClientFactory.create("rest", base)
     response = rest_client.fetch("estados")
 
     if response.success:
@@ -15,12 +19,15 @@ def main():
     print("=" * 60)    
     print(response.to_dict()) 
     print("=" * 60)
+    # =====================================================================
+    
 
     '''
+    # =====================================================================
+    # GRAPHQL
 
-    '''
-
-    graphql_client = ApiClientFactory.create("graphql", "https://countries.trevorblades.com/")
+    base = "https://countries.trevorblades.com/"    
+    graphql_client = ApiClientFactory.create("graphql", base)
     
     query = """
     {
@@ -41,12 +48,17 @@ def main():
     print(f"Dados:")
     print(response.data)
     print("=" * 60) 
-    
+    # =====================================================================
+
     '''
 
 
     '''
-    soap_client = ApiClientFactory.create("soap", "http://www.dneonline.com/calculator.asmx?wsdl")
+    # =====================================================================
+    # SOAP
+
+    base = "http://www.dneonline.com/calculator.asmx?wsdl"
+    soap_client = ApiClientFactory.create("soap", base)
 
     endpoint = "Add"
 
@@ -61,10 +73,14 @@ def main():
     print(f"Dados:")
     print(response.data)
     print("=" * 60)
+    # =====================================================================
     
     '''
 
     '''
+    # =====================================================================
+    # WEBSOCKET
+
     web_socket_client = ApiClientFactory.create(
         "websocket",
         "wss://ws.postman-echo.com/raw"   
@@ -80,8 +96,13 @@ def main():
     print(f"Mensagem: {response.message}")
     print(f"Dados recebidos: {response.data}")
     print("=" * 60)
+    # =====================================================================
+    
+    '''
 
     '''
+    # =====================================================================
+    # ODATA
 
     base = "https://services.odata.org/V4/TripPinServiceRW"
     client = ApiClientFactory.create("odata", base)
@@ -95,6 +116,9 @@ def main():
     print(f"Dados:")
     print(json.dumps(response.data, indent=2, ensure_ascii=False))
     print("=" * 60) 
+    # =====================================================================
+
+    '''
     
 if __name__ == "__main__":
     main()
