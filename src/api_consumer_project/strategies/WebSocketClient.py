@@ -20,7 +20,11 @@ class WebSocketClient(ApiClientStrategy):
                     message="WebSocket OK"
                 )
         except Exception as e:
-            return ResponseModel(success=False, status_code=500, message=str(e))
+            return ResponseModel(
+                success=False,
+                status_code=500,
+                message=str(e)
+            )
 
     def fetch(
         self,
@@ -28,8 +32,6 @@ class WebSocketClient(ApiClientStrategy):
         params: Optional[dict[str, Any]] = None
     ) -> ResponseModel:
         import asyncio
+
         msg = params.get("message", "") if params else ""
         return asyncio.run(self._async_fetch(msg))
-
-
-

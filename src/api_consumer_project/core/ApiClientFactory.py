@@ -4,6 +4,7 @@ from api_consumer_project.strategies.SoapClient import SoapClient
 from api_consumer_project.strategies.WebSocketClient import WebSocketClient
 from api_consumer_project.strategies.ODataClient import ODataClient
 
+
 class ApiClientFactory:
     @staticmethod
     def create(api_type: str, base_url: str):

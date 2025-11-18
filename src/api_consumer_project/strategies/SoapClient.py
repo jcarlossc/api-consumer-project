@@ -4,6 +4,7 @@ from zeep import Client
 from api_consumer_project.core.ApiClientStrategy import ApiClientStrategy
 from api_consumer_project.models.ResponseModel import ResponseModel
 
+
 class SoapClient(ApiClientStrategy):
     def __init__(self, wsdl_url: str) -> None:
         self.client = Client(wsdl=wsdl_url)
@@ -19,7 +20,7 @@ class SoapClient(ApiClientStrategy):
                 return ResponseModel(
                     success=False,
                     status_code=400,
-                    message="SOAP endpoint cannot be None"
+                    message="SOAP endpoint cannot be None",
                 )
             method = getattr(self.client.service, endpoint)
             result = method(**(params or {}))
@@ -27,8 +28,7 @@ class SoapClient(ApiClientStrategy):
             return ResponseModel(
                 success=True,
                 status_code=200,
-                data=result,
-                message="SOAP OK"
+                data=result, message="SOAP OK"
             )
         except Exception as e:
             return ResponseModel(
@@ -36,4 +36,3 @@ class SoapClient(ApiClientStrategy):
                 status_code=500,
                 message=str(e)
             )
-
