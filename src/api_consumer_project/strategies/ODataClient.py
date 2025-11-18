@@ -3,6 +3,7 @@ import requests
 from api_consumer_project.core.ApiClientStrategy import ApiClientStrategy
 from api_consumer_project.models.ResponseModel import ResponseModel
 
+
 class ODataClient(ApiClientStrategy):
     def __init__(self, base_url: str) -> None:
         self.base_url = base_url
@@ -21,11 +22,11 @@ class ODataClient(ApiClientStrategy):
                 success=True,
                 status_code=response.status_code,
                 data=response.json(),
-                message="OData OK"
+                message="OData OK",
             )
         except requests.RequestException as e:
             return ResponseModel(
                 success=False,
                 status_code=getattr(e.response, "status_code", 500),
-                message=str(e)
+                message=str(e),
             )

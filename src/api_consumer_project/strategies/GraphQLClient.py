@@ -3,6 +3,7 @@ from typing import Optional, Any
 from api_consumer_project.core.ApiClientStrategy import ApiClientStrategy
 from api_consumer_project.models.ResponseModel import ResponseModel
 
+
 class GraphQLClient(ApiClientStrategy):
     def __init__(self, base_url: str) -> None:
         self.base_url = base_url
@@ -27,11 +28,11 @@ class GraphQLClient(ApiClientStrategy):
                 status_code=response.status_code,
                 data=response.json(),
                 message="GraphQL OK",
-                metadata={"query": query}
+                metadata={"query": query},
             )
         except requests.RequestException as e:
             return ResponseModel(
                 success=False,
                 status_code=getattr(e.response, "status_code", 500),
-                message=str(e)
+                message=str(e),
             )
