@@ -7,38 +7,43 @@ from api_consumer_project.strategies.ODataClient import ODataClient
 
 class ApiClientFactory:
     """
-        Fábrica responsável por criar instâncias de clientes de API 
-        conforme o tipo solicitado.
+    Fábrica responsável por criar instâncias de clientes de API
+    conforme o tipo solicitado.
 
-        Esta classe implementa o padrão Factory Method para encapsular a lógica de criação
-        de diferentes tipos de clientes de API (REST, GraphQL, SOAP, WebSocket, OData).
-        O objetivo é centralizar a construção desses clientes, evitando que o restante do
-        sistema precise conhecer detalhes específicos de cada implementação.
+    Esta classe implementa o padrão Factory Method para encapsular
+    a lógica de criação de diferentes tipos de clientes de API
+    (REST, GraphQL, SOAP, WebSocket, OData). O objetivo é centralizar
+    a construção desses clientes, evitando que o restante do sistema
+    precise conhecer detalhes específicos de cada implementação.
     """
+
     @staticmethod
     def create(api_type: str, base_url: str):
         """
-            Cria e retorna um cliente de API apropriado com base no tipo informado.
+        Cria e retorna um cliente de API apropriado com base no tipo
+        informado.
 
-            Parameters
-            ----------
-            api_type : str
-                O tipo da API desejada. Valores aceitos incluem:
-                "rest", "graphql", "soap", "websocket", "odata".
-                A comparação é case-insensitive.
-            base_url : str
-                URL base da API que será utilizada pelo cliente criado.
+        Parameters
+        ----------
+        api_type : str
+            O tipo da API desejada. Valores aceitos incluem:
+            "rest", "graphql", "soap", "websocket", "odata".
+            A comparação é case-insensitive.
+        base_url : str
+            URL base da API que será utilizada pelo cliente criado.
 
-            Returns
-            -------
-            ApiClientStrategy
-                Uma instância concreta que implementa a interface "ApiClientStrategy",
-                como "RestClient", "GraphQLClient", "SoapClient", "WebSocketClient" ou "ODataClient".
+        Returns
+        -------
+        ApiClientStrategy
+            Uma instância concreta que implementa a interface
+            "ApiClientStrategy",
+            como "RestClient", "GraphQLClient", "SoapClient",
+            "WebSocketClient" ou "ODataClient".
 
-            Raises
-            ------
-            ValueError
-                Se o tipo de API informado não for reconhecido.
+        Raises
+        ------
+        ValueError
+            Se o tipo de API informado não for reconhecido.
         """
         match api_type.lower():
             case "rest":

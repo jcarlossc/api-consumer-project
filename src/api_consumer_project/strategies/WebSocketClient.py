@@ -23,8 +23,7 @@ class WebSocketClient(ApiClientStrategy):
             return ResponseModel(
                 success=False,
                 status_code=500,
-                message=str(e)
-            )
+                message=str(e))
 
     def fetch(
         self,

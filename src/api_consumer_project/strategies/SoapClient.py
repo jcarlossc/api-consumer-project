@@ -26,13 +26,10 @@ class SoapClient(ApiClientStrategy):
             result = method(**(params or {}))
 
             return ResponseModel(
-                success=True,
-                status_code=200,
-                data=result, message="SOAP OK"
+                success=True, status_code=200, data=result, message="SOAP OK"
             )
         except Exception as e:
             return ResponseModel(
                 success=False,
                 status_code=500,
-                message=str(e)
-            )
+                message=str(e))
