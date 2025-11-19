@@ -10,11 +10,11 @@ class ApiClientStrategy(Protocol):
         Esta classe utiliza o padrão Strategy para permitir que diferentes clientes
         (por exemplo, requisições HTTP, leitura de arquivos locais, mocks para testes,
         consumidores de APIs específicas, etc.) possam ser utilizados de forma
-        intercambiável, desde que implementem o método `fetch`.
+        intercambiável, desde que implementem o método 'fetch'.
 
         Qualquer classe concreta que implemente esta estratégia deve fornecer uma
-        implementação do método `fetch`, garantindo que o retorno seja um objeto
-        do tipo `ResponseModel`.
+        implementação do método 'fetch', garantindo que o retorno seja um objeto
+        do tipo 'ResponseModel'.
     """
     @abstractmethod
     def fetch(
