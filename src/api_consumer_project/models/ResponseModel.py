@@ -41,7 +41,7 @@ class ResponseModel:
     message: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
     timestamp: str = field(
-        default_factory=lambda: datetime.datetime.utcnow().isoformat()
+        default_factory=lambda: datetime.datetime.now(datetime.UTC).isoformat()
     )
 
     def to_dict(self) -> Dict[str, Any]:
