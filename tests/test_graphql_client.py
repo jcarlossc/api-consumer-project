@@ -5,7 +5,7 @@ from api_consumer_project.models.ResponseModel import ResponseModel
 
 
 @patch("api_consumer_project.strategies.GraphQLClient.requests.post")
-def test_graphql_client_success(mock_post):
+def test_graphql_client_success(mock_post) -> None:
     mock_response = MagicMock()
     mock_response.status_code = 200
     mock_response.json.return_value = {

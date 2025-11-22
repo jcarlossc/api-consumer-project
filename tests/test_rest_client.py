@@ -6,7 +6,7 @@ from api_consumer_project.models.ResponseModel import ResponseModel
 import requests
 
 
-def test_rest_client_success():
+def test_rest_client_success() -> None:
     """Testa uma requisição REST que retorna sucesso."""
     mock_response = MagicMock()
     mock_response.status_code = 200

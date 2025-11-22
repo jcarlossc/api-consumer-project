@@ -4,7 +4,7 @@ from api_consumer_project.models.ResponseModel import ResponseModel
 from api_consumer_project.strategies.WebSocketClient import WebSocketClient
 
 
-def test_websocket_client_success():
+def test_websocket_client_success() -> None:
 
     async_ws = AsyncMock()
     async_ws.send.return_value = None

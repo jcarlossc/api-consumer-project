@@ -5,7 +5,7 @@ from api_consumer_project.models.ResponseModel import ResponseModel
 
 
 @patch("api_consumer_project.strategies.ODataClient.requests.get")
-def test_odata_client_success(mock_get):
+def test_odata_client_success(mock_get) -> None:
     # cria resposta falsa
     mock_response = MagicMock()
     mock_response.status_code = 200
