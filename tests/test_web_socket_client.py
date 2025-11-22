@@ -19,7 +19,7 @@ def test_websocket_client_success() -> None:
 
     with patch(
         "api_consumer_project.strategies.WebSocketClient.websockets.connect",
-        return_value=MockWS()
+        return_value=MockWS(),
     ):
         client = WebSocketClient("ws://localhost")
         response: ResponseModel = client.fetch(params={"message": "hello"})

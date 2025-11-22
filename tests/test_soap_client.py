@@ -1,12 +1,12 @@
-import pytest
 from unittest.mock import MagicMock, patch
-
 from api_consumer_project.strategies.SoapClient import SoapClient
 from api_consumer_project.models.ResponseModel import ResponseModel
 
 
 def test_soap_client_success() -> None:
-    with patch("api_consumer_project.strategies.SoapClient.Client") as mock_client_cls:
+    with patch(
+            "api_consumer_project.strategies.SoapClient.Client"
+            ) as mock_client_cls:
         mock_service = MagicMock()
         mock_method = MagicMock(return_value=20)
 
@@ -24,4 +24,3 @@ def test_soap_client_success() -> None:
         assert response.data == 20
         assert response.message == "SOAP OK"
         mock_method.assert_called_once_with(intA=15, intB=5)
-
