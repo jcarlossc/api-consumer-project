@@ -1,23 +1,97 @@
+import os
 from api_consumer_project.core.ApiClientFactory import ApiClientFactory
 
 
 def main():
-    # =====================================================================
-    # REST
 
-    base = "https://servicodados.ibge.gov.br/api/v1/localidades"
-    rest_client = ApiClientFactory.create("rest", base)
-    response = rest_client.fetch("estados")
+    # Método para limpar tela.
+    def clean_screen():
+        os.system('cls' if os.name == 'nt' else 'clear')
+    # Menu principal.
+    def menu_main():
+        print(f"\n {20 * '-'} PROJETO APIs {20 * '-'}")
+        print('[1] - REST API')
+        print('[2] - GRAPHQL API')
+        print('[3] - SOAP API')
+        print('[4] - WEB SOCKET API')
+        print('[5] - ODATA API')
+        print('[6] - SAIR')
+        print(f"{55 * '-'}")    
 
-    if response.success:
-        print(f"{len(response.data)} informações obtidas com sucesso!")
-    else:
-        print(f"Erro ({response.status_code}): {response.message}")
+    # Menu Rest.
+    def menu_rest():
+        print(f"\n {17 * '-'} TIPO DE INFORMAÇÃO {17 * '-'}")
+        print('[1] - ESTADOS')
+        print('[2] - REGIÕES')
+        print('[3] - PAÍSES')
+        print('[4] - SAIR')
+        print(f"{55 * '-'}")    
 
-    print("=" * 60)
-    print(response.to_dict())
-    print("=" * 60)
-    # =====================================================================
+    # Chama método para limpar tela.
+    clean_screen()  
+
+    while True:
+        # Menu principal.
+        menu_main()
+        api_type = input(f"🔍 ESCOLHA O TIPO DE API: ")
+
+        if api_type == '1':
+            clean_screen()
+            menu_rest()
+            api_type_rest = input(f"🔍 ESCOLHA O TIPO DE INFORMAÇÃO: ")
+
+            if api_type_rest == '1':
+                api_type_rest_name = 'estados'
+
+            elif api_type_rest == '2':
+                api_type_rest_name = 'regioes'
+    
+            elif api_type_rest == '3':
+                api_type_rest_name = 'paises'
+
+            elif api_type_rest == '4':
+                clean_screen()
+                print("SAIR, ATÉ A PRÓXIMA!")
+                menu_main()
+
+            else:
+                clean_screen()
+                print('❌ OPÇÃO INVÁLIDA!')    
+
+            clean_screen()
+            # =====================================================================
+            # REST
+            base = "https://servicodados.ibge.gov.br/api/v1/localidades"
+            rest_client = ApiClientFactory.create("rest", base)
+            response = rest_client.fetch(api_type_rest_name)
+
+            if response.success:
+                print(f"{len(response.data)} informações obtidas com sucesso!")
+            else:
+                print(f"Erro ({response.status_code}): {response.message}")
+
+            print("=" * 60)
+            print(response.to_dict())
+            print("=" * 60)
+            # =====================================================================
+
+        elif api_type == '2':
+            pass
+        elif api_type == '3':
+            pass
+        elif api_type == '4':
+            pass
+        elif api_type == '5': 
+            pass
+        elif api_type == '6':
+                clean_screen()
+                print("SAIR, ATÉ A PRÓXIMA!")
+                exit()
+        else:
+            clean_screen()
+            print("❌ OPÇÃO INVÁLIDA!")
+
+
 
     '''
     # =====================================================================
