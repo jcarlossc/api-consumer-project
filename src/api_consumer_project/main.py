@@ -24,7 +24,16 @@ def main():
         print('[1] - ESTADOS')
         print('[2] - REGIÕES')
         print('[3] - PAÍSES')
-        print('[4] - SAIR')
+        print('[4] - VOLTAR')
+        print(f"{55 * '-'}")    
+
+    # Menu GraphQL.
+    def menu_graphql():
+        print(f"\n {17 * '-'} TIPO DE INFORMAÇÃO {17 * '-'}")
+        print('[1] - PAISES')
+        print('[2] - CONTINENTES')
+        print('[3] - LINGUAGENS')
+        print('[4] - VOLTAR')
         print(f"{55 * '-'}")    
 
     # Chama método para limpar tela.
@@ -37,46 +46,112 @@ def main():
 
         if api_type == '1':
             clean_screen()
-            menu_rest()
-            api_type_rest = input(f"🔍 ESCOLHA O TIPO DE INFORMAÇÃO: ")
+            api_type_rest_name = ''
 
-            if api_type_rest == '1':
-                api_type_rest_name = 'estados'
+            while True:
+                menu_rest()
+                api_type_rest = input(f"🔍 ESCOLHA O TIPO DE INFORMAÇÃO: ")
 
-            elif api_type_rest == '2':
-                api_type_rest_name = 'regioes'
-    
-            elif api_type_rest == '3':
-                api_type_rest_name = 'paises'
+                if api_type_rest == '1':
+                    api_type_rest_name = 'estados'
 
-            elif api_type_rest == '4':
+                elif api_type_rest == '2':
+                    api_type_rest_name = 'regioes'
+        
+                elif api_type_rest == '3':
+                    api_type_rest_name = 'paises'
+
+                elif api_type_rest == '4':
+                    clean_screen()
+                    break
+
+                else:
+                    clean_screen()
+                    print('❌ OPÇÃO INVÁLIDA!')  
+                    break  
+
                 clean_screen()
-                print("SAIR, ATÉ A PRÓXIMA!")
-                menu_main()
+                print("POR FAVOR, AGUARDE...")
+                # =====================================================================
+                # REST
+                base = "https://servicodados.ibge.gov.br/api/v1/localidades/"
+                rest_client = ApiClientFactory.create("rest", base)
+                response = rest_client.fetch(api_type_rest_name)
 
-            else:
-                clean_screen()
-                print('❌ OPÇÃO INVÁLIDA!')    
+                if response.success:
+                    print(f"{len(response.data)} informações obtidas com sucesso!")
+                else:
+                    print(f"Erro ({response.status_code}): {response.message}")
 
-            clean_screen()
-            # =====================================================================
-            # REST
-            base = "https://servicodados.ibge.gov.br/api/v1/localidades"
-            rest_client = ApiClientFactory.create("rest", base)
-            response = rest_client.fetch(api_type_rest_name)
-
-            if response.success:
-                print(f"{len(response.data)} informações obtidas com sucesso!")
-            else:
-                print(f"Erro ({response.status_code}): {response.message}")
-
-            print("=" * 60)
-            print(response.to_dict())
-            print("=" * 60)
-            # =====================================================================
+                print("=" * 60)
+                print(response.to_dict())
+                print("=" * 60)
+                # =====================================================================
 
         elif api_type == '2':
-            pass
+            clean_screen()
+
+            while True:
+                menu_graphql()
+                api_type_graphql = input(f"🔍 ESCOLHA O TIPO DE INFORMAÇÃO: ")
+
+                if api_type_graphql == '1':
+                    query = """
+                    {
+                    countries {
+                        code
+                        name
+                        }
+                    }
+                    """
+
+                elif api_type_graphql == '2':
+                    query = """
+                    {
+                    continents {
+                        code
+                        name
+                        }
+                    }
+                    """
+        
+                elif api_type_graphql == '3':
+                    query = """
+                    {
+                    languages {
+                        name
+                        rtl
+                        }
+                    }
+                    """
+
+                elif api_type_graphql == '4':
+                    clean_screen()
+                    break
+
+                else:
+                    clean_screen()
+                    print('❌ OPÇÃO INVÁLIDA!')  
+                    break 
+
+                clean_screen()
+                print("POR FAVOR, AGUARDE...")    
+                # =====================================================================
+                # GRAPHQL
+
+                base = "https://countries.trevorblades.com/"
+                graphql_client = ApiClientFactory.create("graphql", base)
+
+                response = graphql_client.fetch(endpoint="", params={"query": query})
+                print("=" * 60)
+                print(f"Sucesso: {response.success}")
+                print(f"Status: {response.status_code}")
+                print(f"Mensagem: {response.message}")
+                print(f"Dados:")
+                print(response.data)
+                print("=" * 60)
+                # =====================================================================
+
         elif api_type == '3':
             pass
         elif api_type == '4':
@@ -84,41 +159,15 @@ def main():
         elif api_type == '5': 
             pass
         elif api_type == '6':
-                clean_screen()
-                print("SAIR, ATÉ A PRÓXIMA!")
-                exit()
+            clean_screen()
+            print("SAIR, ATÉ A PRÓXIMA!")
+            exit()
         else:
             clean_screen()
             print("❌ OPÇÃO INVÁLIDA!")
 
 
 
-    '''
-    # =====================================================================
-    # GRAPHQL
-
-    base = "https://countries.trevorblades.com/"
-    graphql_client = ApiClientFactory.create("graphql", base)
-    query = """
-    {
-    countries {
-        code
-        name
-        capital
-        }
-    }
-    """
-    response = graphql_client.fetch(endpoint="", params={"query": query})
-    print("=" * 60)
-    print(f"Sucesso: {response.success}")
-    print(f"Status: {response.status_code}")
-    print(f"Mensagem: {response.message}")
-    print(f"Dados:")
-    print(response.data)
-    print("=" * 60)
-    # =====================================================================
-
-    '''
 
     """
     # =====================================================================
