@@ -36,18 +36,31 @@ def main():
         print('[4] - VOLTAR')
         print(f"{55 * '-'}")    
 
+    # Menu Soap.
+    def menu_soap():
+        print(f"\n {17 * '-'} TIPO DE CÁLCULO {17 * '-'}")
+        print('[1] - SOMA')
+        print('[2] - SUBTRAÇÃO')
+        print('[3] - MULTIPLICAÇÃO')
+        print('[4] - DIVISÃO')
+        print('[5] - VOLTAR')
+        print(f"{55 * '-'}")    
+
     # Chama método para limpar tela.
     clean_screen()  
 
+    # While principal.
     while True:
         # Menu principal.
         menu_main()
         api_type = input(f"🔍 ESCOLHA O TIPO DE API: ")
 
+        # Condicional Rest.
         if api_type == '1':
             clean_screen()
             api_type_rest_name = ''
 
+            # While Rest.
             while True:
                 menu_rest()
                 api_type_rest = input(f"🔍 ESCOLHA O TIPO DE INFORMAÇÃO: ")
@@ -88,9 +101,11 @@ def main():
                 print("=" * 60)
                 # =====================================================================
 
+        # Condicional GraphQL.
         elif api_type == '2':
             clean_screen()
 
+            # While GraphQL.
             while True:
                 menu_graphql()
                 api_type_graphql = input(f"🔍 ESCOLHA O TIPO DE INFORMAÇÃO: ")
@@ -152,8 +167,95 @@ def main():
                 print("=" * 60)
                 # =====================================================================
 
+        # Condicional Soap.
         elif api_type == '3':
-            pass
+            clean_screen()
+
+            # While Soap.
+            while True:
+                menu_soap()
+                api_type_soap = input(f"🔍 ESCOLHA O TIPO DE INFORMAÇÃO: ")
+
+                if api_type_soap == '1':
+                    number_01 = input(f"\nDIGITE O PRIMEIRO NÚMERO: ")
+                    number_02 = input(f"DIGITE O SEGUNDO NÚMERO: ")
+
+                    if number_01.isdigit() and number_02.isdigit():
+                        endpoint = "Add"
+                        params = {"intA": number_01, "intB": number_02}
+
+                    else:
+                        clean_screen()
+                        print('❌ INTRADA INVÁLIDA. POR FAVOR, DIGITE SOMENTE NÚMEROS INTEIROS')  
+                        break 
+
+                elif api_type_soap == '2':
+                    number_01 = input(f"\nDIGITE O PRIMEIRO NÚMERO: ")
+                    number_02 = input(f"DIGITE O SEGUNDO NÚMERO: ")
+
+                    if number_01.isdigit() and number_02.isdigit():
+                        endpoint = "Subtract"
+                        params = {"intA": number_01, "intB": number_02}
+
+                    else:
+                        clean_screen()
+                        print('❌ INTRADA INVÁLIDA. POR FAVOR, DIGITE SOMENTE NÚMEROS INTEIROS')  
+                        break 
+        
+                elif api_type_soap == '3':
+                    number_01 = input(f"\nDIGITE O PRIMEIRO NÚMERO: ")
+                    number_02 = input(f"DIGITE O SEGUNDO NÚMERO: ")
+
+                    if number_01.isdigit() and number_02.isdigit():
+                        endpoint = "Multiply"
+                        params = {"intA": number_01, "intB": number_02}
+
+                    else:
+                        clean_screen()
+                        print('❌ INTRADA INVÁLIDA. POR FAVOR, DIGITE SOMENTE NÚMEROS INTEIROS')  
+                        break 
+
+                elif api_type_soap == '4':
+                    number_01 = input(f"\nDIGITE O PRIMEIRO NÚMERO: ")
+                    number_02 = input(f"DIGITE O SEGUNDO NÚMERO: ")
+
+                    if number_01.isdigit() and number_02.isdigit():
+                        endpoint = "Divide"
+                        params = {"intA": number_01, "intB": number_02}
+
+                    else:
+                        clean_screen()
+                        print('❌ INTRADA INVÁLIDA. POR FAVOR, DIGITE SOMENTE NÚMEROS INTEIROS')  
+                        break 
+
+                elif api_type_soap == '5':
+                    clean_screen()
+                    break
+
+                else:
+                    clean_screen()
+                    print('❌ OPÇÃO INVÁLIDA!')  
+                    break  
+
+                clean_screen()
+                print("POR FAVOR, AGUARDE...")
+                # =====================================================================
+                # SOAP
+
+                base = "http://www.dneonline.com/calculator.asmx?wsdl"
+                soap_client = ApiClientFactory.create("soap", base)
+
+                response = soap_client.fetch(endpoint, params)
+
+                print("=" * 60)
+                print(f"Sucesso: {response.success}")
+                print(f"Status: {response.status_code}")
+                print(f"Mensagem: {response.message}")
+                print(f"Dados:")
+                print(f"RESULTADO DO CÁLCULO: {response.data}")
+                print("=" * 60)
+                # =====================================================================
+
         elif api_type == '4':
             pass
         elif api_type == '5': 
@@ -166,31 +268,6 @@ def main():
             clean_screen()
             print("❌ OPÇÃO INVÁLIDA!")
 
-
-
-
-    """
-    # =====================================================================
-    # SOAP
-
-    base = "http://www.dneonline.com/calculator.asmx?wsdl"
-    soap_client = ApiClientFactory.create("soap", base)
-
-    endpoint = "Add"
-
-    params = {"intA": 15, "intB": 5}
-
-    response = soap_client.fetch(endpoint, params)
-
-    print("=" * 60)
-    print(f"Sucesso: {response.success}")
-    print(f"Status: {response.status_code}")
-    print(f"Mensagem: {response.message}")
-    print(f"Dados:")
-    print(response.data)
-    print("=" * 60)
-    # =====================================================================
-    """
 
     """
     # =====================================================================
