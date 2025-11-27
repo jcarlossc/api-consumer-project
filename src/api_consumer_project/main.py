@@ -257,7 +257,30 @@ def main():
                 # =====================================================================
 
         elif api_type == '4':
-            pass
+            text = input(f"\nDIGITE UMA FRASE: ")
+
+            clean_screen()
+            print("POR FAVOR, AGUARDE...")
+            # =====================================================================
+            # WEBSOCKET
+
+            web_socket_client = ApiClientFactory.create(
+                "websocket",
+                "wss://ws.postman-echo.com/raw"
+            )
+
+            params = {"message": text}
+
+            response = web_socket_client.fetch(params=params)
+
+            print("=" * 60)
+            print(f"Sucesso: {response.success}")
+            print(f"Status: {response.status_code}")
+            print(f"Mensagem: {response.message}")
+            print(f"Dados recebidos: {response.data}")
+            print("=" * 60)
+            # =====================================================================
+
         elif api_type == '5': 
             pass
         elif api_type == '6':
@@ -270,25 +293,7 @@ def main():
 
 
     """
-    # =====================================================================
-    # WEBSOCKET
 
-    web_socket_client = ApiClientFactory.create(
-        "websocket",
-        "wss://ws.postman-echo.com/raw"
-    )
-
-    params = {"message": "Olá, Carlos da Costa!"}
-
-    response = web_socket_client.fetch(params=params)
-
-    print("=" * 60)
-    print(f"Sucesso: {response.success}")
-    print(f"Status: {response.status_code}")
-    print(f"Mensagem: {response.message}")
-    print(f"Dados recebidos: {response.data}")
-    print("=" * 60)
-    # =====================================================================
 
     """
 
