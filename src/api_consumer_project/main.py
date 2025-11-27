@@ -1,4 +1,5 @@
 import os
+import json
 from api_consumer_project.core.ApiClientFactory import ApiClientFactory
 
 
@@ -7,6 +8,7 @@ def main():
     # Método para limpar tela.
     def clean_screen():
         os.system('cls' if os.name == 'nt' else 'clear')
+        
     # Menu principal.
     def menu_main():
         print(f"\n {20 * '-'} PROJETO APIs {20 * '-'}")
@@ -46,7 +48,16 @@ def main():
         print('[5] - VOLTAR')
         print(f"{55 * '-'}")    
 
-    # Chama método para limpar tela.
+    # Menu OData.
+    def menu_odata():
+        print(f"\n {17 * '-'} TIPO DE CÁLCULO {17 * '-'}")
+        print('[1] - PESSOAS')
+        print('[2] - COMPANHIAS AÉREAS')
+        print('[3] - AEROPORTOS')
+        print('[4] - VOLTAR')
+        print(f"{55 * '-'}")    
+
+    # Método para limpar tela.
     clean_screen()  
 
     # While principal.
@@ -256,7 +267,9 @@ def main():
                 print("=" * 60)
                 # =====================================================================
 
+        # Condicional WebSocket.
         elif api_type == '4':
+            clean_screen()
             text = input(f"\nDIGITE UMA FRASE: ")
 
             clean_screen()
@@ -281,41 +294,62 @@ def main():
             print("=" * 60)
             # =====================================================================
 
+        # Condicional OData.
         elif api_type == '5': 
-            pass
+            clean_screen()
+            
+            # While OData. 
+            while True:
+                menu_odata()
+                api_type_odata = input(f"🔍 ESCOLHA O TIPO DE INFORMAÇÃO: ")
+
+                if api_type_odata == '1':
+                    type = 'People'
+                    type_params = {"$top": 2}
+
+                elif api_type_odata == '2':
+                    type = 'Airlines'
+                    type_params = {"$top": 2}
+
+                elif api_type_odata == '3':
+                    type = 'Airports'
+                    type_params = {"$top": 2}
+
+                elif api_type_odata == '4':
+                    clean_screen()
+                    break
+
+                else:
+                    clean_screen()
+                    print('❌ OPÇÃO INVÁLIDA!')  
+                    break  
+
+                clean_screen()
+                print("POR FAVOR, AGUARDE...")
+                # =====================================================================
+                # ODATA
+
+                base = "https://services.odata.org/V4/TripPinServiceRW/"
+                client = ApiClientFactory.create("odata", base)
+
+                response = client.fetch(type, params = type_params)
+
+                print("=" * 60)
+                print(f"Sucesso: {response.success}")
+                print(f"Status: {response.status_code}")
+                print(f"Mensagem: {response.message}")
+                print(f"Dados:")
+                print(json.dumps(response.data, indent=2, ensure_ascii=False))
+                print("=" * 60)
+                # =====================================================================
+
         elif api_type == '6':
             clean_screen()
-            print("SAIR, ATÉ A PRÓXIMA!")
+            print("SAINDO, ATÉ A PRÓXIMA!")
             exit()
         else:
             clean_screen()
             print("❌ OPÇÃO INVÁLIDA!")
-
-
-    """
-
-
-    """
-
-    """
-    # =====================================================================
-    # ODATA
-
-    base = "https://services.odata.org/V4/TripPinServiceRW"
-    client = ApiClientFactory.create("odata", base)
-
-    response = client.fetch("People", params={"$top": 5})
-
-    print("=" * 60)
-    print(f"Sucesso: {response.success}")
-    print(f"Status: {response.status_code}")
-    print(f"Mensagem: {response.message}")
-    print(f"Dados:")
-    print(json.dumps(response.data, indent=2, ensure_ascii=False))
-    print("=" * 60)
-    # =====================================================================
-
-    """
 
 
 if __name__ == "__main__":
