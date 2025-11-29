@@ -82,7 +82,8 @@ class SoapClient(ApiClientStrategy):
             return ResponseModel(
                 success=True,
                 status_code=200,
-                data=result, message="SOAP OK"
+                data=result,
+                message="SOAP OK"
             )
         except Exception as e:
             return ResponseModel(

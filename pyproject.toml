@@ -3,19 +3,18 @@ name = "api-consumer-project"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "jcarlossc",email = "josecscosta@fac.pe.senac.br"}
+    { name = "jcarlossc", email = "josecscosta@fac.pe.senac.br" }
 ]
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "requests (>=2.32.5,<3.0.0)",
-    "zeep (>=4.3.2,<5.0.0)",
-    "asyncio (>=4.0.0,<5.0.0)",
-    "websockets (>=15.0.1,<16.0.0)"
+    "requests>=2.32.5,<3.0.0",
+    "zeep>=4.3.2,<5.0.0",
+    "websockets>=15.0.1,<16.0.0"
 ]
 
 [tool.poetry]
-packages = [{include = "api_consumer_project", from = "src"}]
+packages = [{ include = "api_consumer_project", from = "src" }]
 
 [tool.poetry.scripts]
 api = "api_consumer_project.main:main"
@@ -23,9 +22,9 @@ api = "api_consumer_project.main:main"
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.18.2"
 pytest = "^8.4.2"
-black = "^25.9.0"
 flake8 = "^7.3.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
