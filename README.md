@@ -224,11 +224,11 @@ poetry run flake8 .
 
 ## 📌 Objetivos do Projeto
 
-✔ Demonstrar arquitetura escalável com Strategy
-✔ Criar clientes plugáveis para múltiplos tipos de API
-✔ Aplicar padrões profissionais de desenvolvimento
-✔ Mostrar domínio de testes, tipagem e boas práticas
-✔ Fornecer um projeto sólido para portfólio
+* Demonstrar arquitetura escalável com Strategy
+* Criar clientes plugáveis para múltiplos tipos de API
+* Aplicar padrões profissionais de desenvolvimento
+* Mostrar domínio de testes, tipagem e boas práticas
+* Fornecer um projeto sólido para portfólio
 
 ---
 
@@ -254,3 +254,4 @@ MIT — você pode usar e modificar livremente.
 📌Twitter/X: https://x.com/jcarlossc1977<br>
 
 ----
+
