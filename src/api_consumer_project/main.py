@@ -1,352 +1,311 @@
 import os
 import json
+from typing import Callable, Dict, Optional
 from api_consumer_project.core.ApiClientFactory import ApiClientFactory
 
 
-def main():
+# -------------------
+# Funções auxiliares
+# -------------------
+def clean_screen() -> None:
+    os.system("cls" if os.name == "nt" else "clear")
 
-    # Método para limpar tela.
-    def clean_screen():
-        os.system('cls' if os.name == 'nt' else 'clear')
-        
-    # Menu principal.
-    def menu_main():
-        print(f"\n {20 * '-'} PROJETO APIs {20 * '-'}")
-        print('[1] - REST API')
-        print('[2] - GRAPHQL API')
-        print('[3] - SOAP API')
-        print('[4] - WEB SOCKET API')
-        print('[5] - ODATA API')
-        print('[6] - SAIR')
-        print(f"{55 * '-'}")    
 
-    # Menu Rest.
-    def menu_rest():
-        print(f"\n {17 * '-'} TIPO DE INFORMAÇÃO {17 * '-'}")
-        print('[1] - ESTADOS')
-        print('[2] - REGIÕES')
-        print('[3] - PAÍSES')
-        print('[4] - VOLTAR')
-        print(f"{55 * '-'}")    
+def show_menu(title: str, options: Dict[str, str]) -> None:
+    line = "-" * (len(title) + 6)
+    print(f"\n{line}\n {title} \n{line}")
+    for key, label in options.items():
+        print(f"[{key}] - {label}")
+    print(line)
 
-    # Menu GraphQL.
-    def menu_graphql():
-        print(f"\n {17 * '-'} TIPO DE INFORMAÇÃO {17 * '-'}")
-        print('[1] - PAISES')
-        print('[2] - CONTINENTES')
-        print('[3] - LINGUAGENS')
-        print('[4] - VOLTAR')
-        print(f"{55 * '-'}")    
 
-    # Menu Soap.
-    def menu_soap():
-        print(f"\n {17 * '-'} TIPO DE CÁLCULO {17 * '-'}")
-        print('[1] - SOMA')
-        print('[2] - SUBTRAÇÃO')
-        print('[3] - MULTIPLICAÇÃO')
-        print('[4] - DIVISÃO')
-        print('[5] - VOLTAR')
-        print(f"{55 * '-'}")    
+def ask_option(prompt: str) -> str:
+    return input(f"{prompt}: ").strip()
 
-    # Menu OData.
-    def menu_odata():
-        print(f"\n {17 * '-'} TIPO DE CÁLCULO {17 * '-'}")
-        print('[1] - PESSOAS')
-        print('[2] - COMPANHIAS AÉREAS')
-        print('[3] - AEROPORTOS')
-        print('[4] - VOLTAR')
-        print(f"{55 * '-'}")    
 
-    # Método para limpar tela.
-    clean_screen()  
+def wait() -> None:
+    clean_screen()
+    print("POR FAVOR, AGUARDE...\n")
 
-    # While principal.
+
+# ------------------------------
+# Lógica REST
+# ------------------------------
+MENU_REST_MAP = {"1": "estados", "2": "regioes", "3": "paises"}
+
+
+def handle_rest() -> None:
     while True:
-        # Menu principal.
-        menu_main()
-        api_type = input(f"🔍 ESCOLHA O TIPO DE API: ")
+        show_menu(
+            "TIPO DE INFORMAÇÃO (REST)",
+            {"1": "ESTADOS", "2": "REGIÕES", "3": "PAÍSES", "4": "VOLTAR"},
+        )
+        option = ask_option("🔍 ESCOLHA O TIPO DE INFORMAÇÃO")
 
-        # Condicional Rest.
-        if api_type == '1':
+        if not option.isdigit() or option >= "5":
             clean_screen()
-            api_type_rest_name = ''
+            print("❌ OPÇÃO INVÁLIDA!")
+            continue
 
-            # While Rest.
-            while True:
-                menu_rest()
-                api_type_rest = input(f"🔍 ESCOLHA O TIPO DE INFORMAÇÃO: ")
-
-                if api_type_rest == '1':
-                    api_type_rest_name = 'estados'
-
-                elif api_type_rest == '2':
-                    api_type_rest_name = 'regioes'
-        
-                elif api_type_rest == '3':
-                    api_type_rest_name = 'paises'
-
-                elif api_type_rest == '4':
-                    clean_screen()
-                    break
-
-                else:
-                    clean_screen()
-                    print('❌ OPÇÃO INVÁLIDA!')  
-                    break  
-
-                clean_screen()
-                print("POR FAVOR, AGUARDE...")
-                # =====================================================================
-                # REST
-                base = "https://servicodados.ibge.gov.br/api/v1/localidades/"
-                rest_client = ApiClientFactory.create("rest", base)
-                response = rest_client.fetch(api_type_rest_name)
-
-                if response.success:
-                    print(f"{len(response.data)} informações obtidas com sucesso!")
-                else:
-                    print(f"Erro ({response.status_code}): {response.message}")
-
-                print("=" * 60)
-                print(response.to_dict())
-                print("=" * 60)
-                # =====================================================================
-
-        # Condicional GraphQL.
-        elif api_type == '2':
+        elif option == "4":
             clean_screen()
+            return
 
-            # While GraphQL.
-            while True:
-                menu_graphql()
-                api_type_graphql = input(f"🔍 ESCOLHA O TIPO DE INFORMAÇÃO: ")
-
-                if api_type_graphql == '1':
-                    query = """
-                    {
-                    countries {
-                        code
-                        name
-                        }
-                    }
-                    """
-
-                elif api_type_graphql == '2':
-                    query = """
-                    {
-                    continents {
-                        code
-                        name
-                        }
-                    }
-                    """
-        
-                elif api_type_graphql == '3':
-                    query = """
-                    {
-                    languages {
-                        name
-                        rtl
-                        }
-                    }
-                    """
-
-                elif api_type_graphql == '4':
-                    clean_screen()
-                    break
-
-                else:
-                    clean_screen()
-                    print('❌ OPÇÃO INVÁLIDA!')  
-                    break 
-
-                clean_screen()
-                print("POR FAVOR, AGUARDE...")    
-                # =====================================================================
-                # GRAPHQL
-
-                base = "https://countries.trevorblades.com/"
-                graphql_client = ApiClientFactory.create("graphql", base)
-
-                response = graphql_client.fetch(endpoint="", params={"query": query})
-                print("=" * 60)
-                print(f"Sucesso: {response.success}")
-                print(f"Status: {response.status_code}")
-                print(f"Mensagem: {response.message}")
-                print(f"Dados:")
-                print(response.data)
-                print("=" * 60)
-                # =====================================================================
-
-        # Condicional Soap.
-        elif api_type == '3':
+        api_name = MENU_REST_MAP.get(option)
+        if not api_name:
             clean_screen()
+            print("❌ OPÇÃO INVÁLIDA!")
 
-            # While Soap.
-            while True:
-                menu_soap()
-                api_type_soap = input(f"🔍 ESCOLHA O TIPO DE INFORMAÇÃO: ")
+        wait()
 
-                if api_type_soap == '1':
-                    number_01 = input(f"\nDIGITE O PRIMEIRO NÚMERO: ")
-                    number_02 = input(f"DIGITE O SEGUNDO NÚMERO: ")
+        client = ApiClientFactory.create(
+            "rest", "https://servicodados.ibge.gov.br/api/v1/localidades/"
+        )
 
-                    if number_01.isdigit() and number_02.isdigit():
-                        endpoint = "Add"
-                        params = {"intA": number_01, "intB": number_02}
+        response = client.fetch(api_name)
 
-                    else:
-                        clean_screen()
-                        print('❌ INTRADA INVÁLIDA. POR FAVOR, DIGITE SOMENTE NÚMEROS INTEIROS')  
-                        break 
+        print("=" * 60)
+        print(f"Sucesso: {response.success}")
+        print(f"Status: {response.status_code}")
+        print(f"Mensagem: {response.message}")
+        print(f"Dados:\n{response.to_dict()}")
+        print("=" * 60)
 
-                elif api_type_soap == '2':
-                    number_01 = input(f"\nDIGITE O PRIMEIRO NÚMERO: ")
-                    number_02 = input(f"DIGITE O SEGUNDO NÚMERO: ")
 
-                    if number_01.isdigit() and number_02.isdigit():
-                        endpoint = "Subtract"
-                        params = {"intA": number_01, "intB": number_02}
+# ------------------------------
+# Lógica GraphQL
+# ------------------------------
+GRAPHQL_QUERIES = {
+    "1": """
+        { countries { code name } }
+    """,
+    "2": """
+        { continents { code name } }
+    """,
+    "3": """
+        { languages { name rtl } }
+    """,
+}
 
-                    else:
-                        clean_screen()
-                        print('❌ INTRADA INVÁLIDA. POR FAVOR, DIGITE SOMENTE NÚMEROS INTEIROS')  
-                        break 
-        
-                elif api_type_soap == '3':
-                    number_01 = input(f"\nDIGITE O PRIMEIRO NÚMERO: ")
-                    number_02 = input(f"DIGITE O SEGUNDO NÚMERO: ")
 
-                    if number_01.isdigit() and number_02.isdigit():
-                        endpoint = "Multiply"
-                        params = {"intA": number_01, "intB": number_02}
+def handle_graphql() -> None:
+    while True:
+        show_menu(
+            "TIPO DE INFORMAÇÃO (GRAPHQL)",
+            {
+                "1": "PAISES",
+                "2": "CONTINENTES",
+                "3": "LINGUAGENS",
+                "4": "VOLTAR"
+            },
+        )
+        option = ask_option("🔍 ESCOLHA O TIPO DE INFORMAÇÃO")
 
-                    else:
-                        clean_screen()
-                        print('❌ INTRADA INVÁLIDA. POR FAVOR, DIGITE SOMENTE NÚMEROS INTEIROS')  
-                        break 
-
-                elif api_type_soap == '4':
-                    number_01 = input(f"\nDIGITE O PRIMEIRO NÚMERO: ")
-                    number_02 = input(f"DIGITE O SEGUNDO NÚMERO: ")
-
-                    if number_01.isdigit() and number_02.isdigit():
-                        endpoint = "Divide"
-                        params = {"intA": number_01, "intB": number_02}
-
-                    else:
-                        clean_screen()
-                        print('❌ INTRADA INVÁLIDA. POR FAVOR, DIGITE SOMENTE NÚMEROS INTEIROS')  
-                        break 
-
-                elif api_type_soap == '5':
-                    clean_screen()
-                    break
-
-                else:
-                    clean_screen()
-                    print('❌ OPÇÃO INVÁLIDA!')  
-                    break  
-
-                clean_screen()
-                print("POR FAVOR, AGUARDE...")
-                # =====================================================================
-                # SOAP
-
-                base = "http://www.dneonline.com/calculator.asmx?wsdl"
-                soap_client = ApiClientFactory.create("soap", base)
-
-                response = soap_client.fetch(endpoint, params)
-
-                print("=" * 60)
-                print(f"Sucesso: {response.success}")
-                print(f"Status: {response.status_code}")
-                print(f"Mensagem: {response.message}")
-                print(f"Dados:")
-                print(f"RESULTADO DO CÁLCULO: {response.data}")
-                print("=" * 60)
-                # =====================================================================
-
-        # Condicional WebSocket.
-        elif api_type == '4':
+        if not option.isdigit():
             clean_screen()
-            text = input(f"\nDIGITE UMA FRASE: ")
+            print("❌ OPÇÃO INVÁLIDA!")
+            continue
 
+        elif option == "4":
             clean_screen()
-            print("POR FAVOR, AGUARDE...")
-            # =====================================================================
-            # WEBSOCKET
+            return
 
-            web_socket_client = ApiClientFactory.create(
-                "websocket",
-                "wss://ws.postman-echo.com/raw"
-            )
-
-            params = {"message": text}
-
-            response = web_socket_client.fetch(params=params)
-
-            print("=" * 60)
-            print(f"Sucesso: {response.success}")
-            print(f"Status: {response.status_code}")
-            print(f"Mensagem: {response.message}")
-            print(f"Dados recebidos: {response.data}")
-            print("=" * 60)
-            # =====================================================================
-
-        # Condicional OData.
-        elif api_type == '5': 
+        query = GRAPHQL_QUERIES.get(option)
+        if not query:
             clean_screen()
-            
-            # While OData. 
-            while True:
-                menu_odata()
-                api_type_odata = input(f"🔍 ESCOLHA O TIPO DE INFORMAÇÃO: ")
+            print("❌ OPÇÃO INVÁLIDA!")
+            continue
 
-                if api_type_odata == '1':
-                    type = 'People'
-                    type_params = {"$top": 2}
+        wait()
 
-                elif api_type_odata == '2':
-                    type = 'Airlines'
-                    type_params = {"$top": 2}
+        client = ApiClientFactory.create(
+            "graphql", "https://countries.trevorblades.com/"
+        )
+        response = client.fetch(endpoint="", params={"query": query})
 
-                elif api_type_odata == '3':
-                    type = 'Airports'
-                    type_params = {"$top": 2}
+        print("=" * 60)
+        print(json.dumps(response.to_dict(), indent=2, ensure_ascii=False))
+        print("=" * 60)
 
-                elif api_type_odata == '4':
-                    clean_screen()
-                    break
 
-                else:
-                    clean_screen()
-                    print('❌ OPÇÃO INVÁLIDA!')  
-                    break  
+# ------------------------------
+# Lógica SOAP
+# ------------------------------
+SOAP_OPERATIONS = {
+    "1": ("Add", "SOMA"),
+    "2": ("Subtract", "SUBTRAÇÃO"),
+    "3": ("Multiply", "MULTIPLICAÇÃO"),
+    "4": ("Divide", "DIVISÃO"),
+}
 
-                clean_screen()
-                print("POR FAVOR, AGUARDE...")
-                # =====================================================================
-                # ODATA
 
-                base = "https://services.odata.org/V4/TripPinServiceRW/"
-                client = ApiClientFactory.create("odata", base)
+def get_two_numbers() -> Optional[Dict[str, str]]:
+    n1 = input("\nDIGITE O PRIMEIRO NÚMERO: ")
+    n2 = input("DIGITE O SEGUNDO NÚMERO: ")
 
-                response = client.fetch(type, params = type_params)
+    if n1.isdigit() and n2.isdigit():
+        return {"intA": n1, "intB": n2}
 
-                print("=" * 60)
-                print(f"Sucesso: {response.success}")
-                print(f"Status: {response.status_code}")
-                print(f"Mensagem: {response.message}")
-                print(f"Dados:")
-                print(json.dumps(response.data, indent=2, ensure_ascii=False))
-                print("=" * 60)
-                # =====================================================================
+    clean_screen()
+    print("❌ ENTRADA INVÁLIDA. DIGITE SOMENTE NÚMEROS INTEIROS.")
+    return None
 
-        elif api_type == '6':
+
+def handle_soap() -> None:
+    while True:
+        show_menu(
+            "TIPO DE CÁLCULO (SOAP)",
+            {
+                "1": "SOMA",
+                "2": "SUBTRAÇÃO",
+                "3": "MULTIPLICAÇÃO",
+                "4": "DIVISÃO",
+                "5": "VOLTAR",
+            },
+        )
+        option = ask_option("🔍 ESCOLHA O TIPO DE CÁLCULO")
+
+        if not option.isdigit():
             clean_screen()
-            print("SAINDO, ATÉ A PRÓXIMA!")
-            exit()
+            print("❌ OPÇÃO INVÁLIDA!")
+            continue
+
+        elif option == "5":
+            clean_screen()
+            return
+
+        operation = SOAP_OPERATIONS.get(option)
+        if not operation:
+            clean_screen()
+            print("❌ OPÇÃO INVÁLIDA!")
+            continue
+
+        params = get_two_numbers()
+        if not params:
+            continue
+
+        endpoint, label = operation
+        wait()
+
+        client = ApiClientFactory.create(
+            "soap", "http://www.dneonline.com/calculator.asmx?wsdl"
+        )
+        response = client.fetch(endpoint, params)
+
+        print("=" * 60)
+        print(f"RESULTADO ({label}): {response.data}")
+        print("=" * 60)
+
+
+# ------------------------------
+# Lógica WebSocket
+# ------------------------------
+def handle_websocket() -> None:
+    clean_screen()
+    print(f'{"-" * 15}\n WEB SOCKET\n{"-" * 15}')
+    text = input("\nDIGITE UMA FRASE: ")
+
+    wait()
+
+    client = ApiClientFactory.create(
+        "websocket", "wss://ws.postman-echo.com/raw"
+    )
+    response = client.fetch(params={"message": text})
+
+    print("=" * 60)
+    print(json.dumps(response.to_dict(), indent=2, ensure_ascii=False))
+    print("=" * 60)
+
+
+# ------------------------------
+# Lógica ODATA
+# ------------------------------
+ODATA_TYPES = {
+    "1": ("People", {"$top": 2}),
+    "2": ("Airlines", {"$top": 2}),
+    "3": ("Airports", {"$top": 2}),
+}
+
+
+def handle_odata() -> None:
+    while True:
+        show_menu(
+            "TIPO DE INFORMAÇÃO (ODATA)",
+            {
+                "1": "PESSOAS",
+                "2": "COMPANHIAS AÉREAS",
+                "3": "AEROPORTOS",
+                "4": "VOLTAR",
+            },
+        )
+        option = ask_option("🔍 ESCOLHA O TIPO DE INFORMAÇÃO")
+
+        if not option.isdigit():
+            clean_screen()
+            print("❌ OPÇÃO INVÁLIDA!")
+            continue
+
+        if option == "4":
+            clean_screen()
+            return
+
+        config = ODATA_TYPES.get(option)
+        if not config:
+            clean_screen()
+            print("❌ OPÇÃO INVÁLIDA!")
+            continue
+
+        entity, params = config
+        wait()
+
+        client = ApiClientFactory.create(
+            "odata", "https://services.odata.org/V4/TripPinServiceRW/"
+        )
+        response = client.fetch(entity, params=params)
+
+        print("=" * 60)
+        print(json.dumps(response.data, indent=2, ensure_ascii=False))
+        print("=" * 60)
+
+
+# ------------------------------
+# Main Loop
+# ------------------------------
+def main() -> None:
+    clean_screen()
+
+    ACTIONS: Dict[str, Callable[[], None]] = {
+        "1": handle_rest,
+        "2": handle_graphql,
+        "3": handle_soap,
+        "4": handle_websocket,
+        "5": handle_odata,
+    }
+
+    while True:
+        show_menu(
+            "PROJETO APIs",
+            {
+                "1": "REST API",
+                "2": "GRAPHQL API",
+                "3": "SOAP API",
+                "4": "WEB SOCKET API",
+                "5": "ODATA API",
+                "6": "SAIR",
+            },
+        )
+
+        option = ask_option("🔍 ESCOLHA O TIPO DE API")
+
+        if option == "6":
+            clean_screen()
+            print("SAINDO... ATÉ A PRÓXIMA!")
+            break
+
+        action = ACTIONS.get(option)
+        if action:
+            clean_screen()
+            action()
         else:
             clean_screen()
             print("❌ OPÇÃO INVÁLIDA!")

@@ -8,7 +8,8 @@ def test_graphql_client_success(mock_post) -> None:
     mock_response = MagicMock()
     mock_response.status_code = 200
     mock_response.json.return_value = {
-        "data": {"user": {"id": 1, "name": "Alice"}}}
+        "data": {"user": {"id": 1, "name": "Alice"}}
+    }
     mock_response.raise_for_status.return_value = None
     mock_post.return_value = mock_response
 

@@ -9,7 +9,8 @@ def test_odata_client_success(mock_get) -> None:
     mock_response = MagicMock()
     mock_response.status_code = 200
     mock_response.json.return_value = {
-        "value": [{"id": 1, "name": "Product A"}]}
+        "value": [{"id": 1, "name": "Product A"}]
+    }
     mock_response.raise_for_status.return_value = None
     mock_get.return_value = mock_response
 
@@ -22,4 +23,5 @@ def test_odata_client_success(mock_get) -> None:
     assert result.message == "OData OK"
 
     mock_get.assert_called_once_with(
-        "https://example.com/odata/Products", params=None)
+        "https://example.com/odata/Products", params=None
+    )

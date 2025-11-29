@@ -5,8 +5,8 @@ from api_consumer_project.models.ResponseModel import ResponseModel
 
 def test_soap_client_success() -> None:
     with patch(
-            "api_consumer_project.strategies.SoapClient.Client"
-            ) as mock_client_cls:
+        "api_consumer_project.strategies.SoapClient.Client"
+    ) as mock_client_cls:
         mock_service = MagicMock()
         mock_method = MagicMock(return_value=20)
 
